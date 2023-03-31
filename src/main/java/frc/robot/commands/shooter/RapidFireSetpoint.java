@@ -50,7 +50,7 @@ public class RapidFireSetpoint extends CommandBase {
     public void execute() {
             m_indexer.setIndexerPercentOutput(0.7);
             m_indexer.setKickerPercentOutput(-0.8);
-            m_intake.setIntakePercentOutput(0.5);
+            m_intake.setIntakePercentOutput(0.7);
             m_shooter.setPercentOutput(m_output);
     }
 

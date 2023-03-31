@@ -79,6 +79,7 @@ public class Turret extends SubsystemBase {
         turretMotor.configMotionCruiseVelocity(Constants.Turret.kCruiseVelocity);
         turretMotor.configMotionAcceleration(Constants.Turret.kMotionAcceleration);
         turretMotor.configAllowableClosedloopError(0, Constants.Turret.kErrorBand);
+        SmartDashboard.putData("Turret Subsystem", this);
     }
 
     public void resetEncoder() {
@@ -200,6 +201,7 @@ public class Turret extends SubsystemBase {
             SmartDashboard.putNumber(/*"Turret",*/ "Turret Setpoint", getSetpoint());
             SmartDashboard.putBoolean(/*"Turret",*/ "Home", getTurretHome());
         }
+        SmartDashboard.putNumber(/*"Turret",*/ "Turret Motor Output", turretMotor.getMotorOutputPercent());
     }
 
     @Override

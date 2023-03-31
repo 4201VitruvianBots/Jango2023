@@ -12,14 +12,38 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/DT Subsystem": "Subsystem",
-      "/SmartDashboard/Field2d": "Field2d"
+      "/SmartDashboard/Field2d": "Field2d",
+      "/SmartDashboard/Turret Subsystem": "Subsystem"
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Turret Subsystem": {
+          "open": true
+        },
         "open": true
       }
+    }
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "height": 263,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Turret Motor Output"
+            }
+          ]
+        }
+      ]
     }
   }
 }

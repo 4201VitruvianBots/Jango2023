@@ -95,7 +95,9 @@ public class RobotContainer {
                 () -> -leftJoystick.getRawAxis(1),
                 () -> rightJoystick.getRawAxis(0)));
 
-        m_turret.setDefaultCommand(new SetTurretManualOutput(m_turret, xboxController::getLeftX));
+        // m_turret.setDefaultCommand(new SetTurretManualOutput(m_turret, () -> xboxController.getLeftY()));
+        m_turret.setDefaultCommand(new SetTurretManualOutput(m_turret, xboxController::getLeftY));
+
         m_climber.setDefaultCommand(new SetClimberOutput(m_climber, xboxController::getRightY));
     }
 
@@ -113,16 +115,16 @@ public class RobotContainer {
     
     
     
-        xboxController.leftTrigger().whileTrue(new SetIntakePercentOutput(m_intake, 0.5));
-        xboxController.rightTrigger().whileTrue(new SetIntakePercentOutput(m_intake, 0.5));
+        // xboxController.leftTrigger().whileTrue(new SetIntakePercentOutput(m_intake, 0.5));
+        // xboxController.rightTrigger().whileTrue(new SetIntakePercentOutput(m_intake, 0.5));
         xboxController.rightTrigger().whileTrue(new FeedAll(m_indexer)); 
         xboxController.leftTrigger().whileTrue(new EjectAll(m_indexer, m_intake)); 
 
-
+        xboxController.x().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.1));
         xboxController.a().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.32)); 
-        xboxController.b().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.50)); 
-        xboxController.y().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.70)); 
-
+        xboxController.b().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.54)); 
+        //xboxController.y().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.45)); 
+        
         xboxController.rightBumper().onTrue(new ToggleIntakePistons(m_intake));
         // xboxController.rightTrigger().whileTrue(new ControlledIntake(m_intake, m_indexer, xboxController::getRightY)); // Deploy intake
 
@@ -137,7 +139,6 @@ public class RobotContainer {
         xboxController.leftStick().onTrue(new EnableClimbMode(m_climber, m_turret));                     // R3 - toggle driver climb mode?
 
         xboxController.povRight().onTrue(new ZeroTurretEncoder(m_turret));
-
       }
 
     /**

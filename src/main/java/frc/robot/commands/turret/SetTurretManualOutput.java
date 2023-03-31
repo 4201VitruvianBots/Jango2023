@@ -18,8 +18,10 @@ import java.util.function.DoubleSupplier;
 public class SetTurretManualOutput extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final Turret m_turret;
-    private final double m_percentOutput;
+    private final DoubleSupplier m_percentOutput;
     private final double threshHold = 0.05;
+
+    private double percentOutput;
 
     /**
      * Sets the percent of voltage to be sent to the turret.
@@ -29,7 +31,7 @@ public class SetTurretManualOutput extends CommandBase {
      */
     public SetTurretManualOutput(Turret turret, DoubleSupplier percentOutput) {
         m_turret = turret;
-        m_percentOutput = percentOutput.getAsDouble();
+        m_percentOutput = percentOutput; 
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(turret);
@@ -43,8 +45,10 @@ public class SetTurretManualOutput extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if(Math.abs(m_percentOutput) > threshHold)
-            m_turret.setPercentOutput(m_percentOutput);
+        percentOutput = m_percentOutput.getAsDouble(); 
+        if(Math.abs(percentOutput) > threshHold){
+            m_turret.setPercentOutput(percentOutput);
+        }
     }
 
     // Called once the command ends or is interrupted.
