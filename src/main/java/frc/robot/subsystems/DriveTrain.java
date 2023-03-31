@@ -124,7 +124,8 @@ public class DriveTrain extends SubsystemBase {
             motors[i].setNeutralMode(NeutralMode.Coast);
             motors[i].configForwardSoftLimitEnable(false);
             motors[i].configReverseSoftLimitEnable(false);
-
+            motors[i].configPeakOutputForward(0.2); 
+            motors[i].configPeakOutputReverse(-0.2);
             if (motors[i] instanceof TalonFX) {
                 driveMotors[i].configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 0, 0));
                 driveMotors[i].configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
