@@ -86,12 +86,13 @@ public class Climber extends SubsystemBase {
     private void updateShuffleboard() {
         SmartDashboard.putBoolean("Climb Mode", getClimbState());
         SmartDashboard.putBoolean( "Climb Pistons", getClimbPistonExtendStatus());
-
+        SmartDashboard.putNumber("Climber Output", climbMotor.getMotorOutputPercent());
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        updateShuffleboard();
     }
 
     @Override

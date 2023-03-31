@@ -48,6 +48,7 @@ public class SetClimberOutput extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_climber.setClimbState(true);
     }
 
     @Override

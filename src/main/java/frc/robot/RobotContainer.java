@@ -14,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.USB;
 import frc.robot.commands.autonomous.routines.DriveForwardDistance;
 import frc.robot.commands.climber.EnableClimbMode;
+import frc.robot.commands.climber.SetClimberManualOutput;
 import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.drivetrain.SetArcadeDrive;
 import frc.robot.commands.indexer.EjectAll;
@@ -96,9 +97,9 @@ public class RobotContainer {
                 () -> rightJoystick.getRawAxis(0)));
 
         // m_turret.setDefaultCommand(new SetTurretManualOutput(m_turret, () -> xboxController.getLeftY()));
-        m_turret.setDefaultCommand(new SetTurretManualOutput(m_turret, xboxController::getLeftY));
+        m_turret.setDefaultCommand(new SetTurretManualOutput(m_turret, xboxController::getLeftX));
 
-        m_climber.setDefaultCommand(new SetClimberOutput(m_climber, xboxController::getRightY));
+        m_climber.setDefaultCommand(new SetClimberManualOutput(m_climber, xboxController::getLeftY));
     }
 
     /**
