@@ -47,10 +47,8 @@ public class SetRpmSetpoint extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (m_reset) {
       m_shooter.setRpmSetpoint(0);
       m_shooter.setPercentOutput(0);
-    }
   }
 
   // Returns true when the command should end.

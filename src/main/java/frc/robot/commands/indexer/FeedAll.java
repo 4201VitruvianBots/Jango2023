@@ -38,8 +38,8 @@ public class FeedAll extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_indexer.setIndexerPercentOutput(0.6);
-        m_indexer.setKickerPercentOutput(0.5);
+        m_indexer.setIndexerPercentOutput(0.4);
+        m_indexer.setKickerPercentOutput(0.4);
     }
 
     // Called once the command ends or is interrupted.
@@ -52,10 +52,6 @@ public class FeedAll extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        double time = Timer.getFPGATimestamp();
-        if(m_indexer.getIndexerTopSensor()) {
-            time = Timer.getFPGATimestamp();
-        }
-        return time >= 2;
+        return false;
     }
 }

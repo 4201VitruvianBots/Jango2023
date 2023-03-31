@@ -21,6 +21,7 @@ public class RapidFireSetpoint extends CommandBase {
     private final Shooter m_shooter;
     private final Indexer m_indexer;
     private final Intake m_intake;
+    private double m_output; 
 
     private double startTime;
 
@@ -28,11 +29,12 @@ public class RapidFireSetpoint extends CommandBase {
      * Feeds to shooter when it's ready to shoot
      *
      */
-    public RapidFireSetpoint(Shooter shooter, Indexer indexer, Intake intake) {
+    public RapidFireSetpoint(Shooter shooter, Indexer indexer, Intake intake, double shooterOutput) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_shooter = shooter;
         m_indexer = indexer;
         m_intake = intake;
+        m_output = shooterOutput; 
         addRequirements(shooter);
         addRequirements(indexer);
         addRequirements(intake);
@@ -41,17 +43,15 @@ public class RapidFireSetpoint extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        startTime = Timer.getFPGATimestamp();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        if(Math.abs(m_shooter.getRpm(0) - m_shooter.getRpmSetpoint()) <= 100 || Timer.getFPGATimestamp() - startTime > 0.5) {
-            m_indexer.setIndexerPercentOutput(1);
-            m_indexer.setKickerPercentOutput(1);
-            m_intake.setIntakePercentOutput(1);
-        }
+            m_indexer.setIndexerPercentOutput(0.7);
+            m_indexer.setKickerPercentOutput(-0.8);
+            m_intake.setIntakePercentOutput(0.5);
+            m_shooter.setPercentOutput(m_output);
     }
 
     // Called once the command ends or is interrupted.

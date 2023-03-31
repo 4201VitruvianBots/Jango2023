@@ -144,9 +144,9 @@ public final class Constants {
         public static final double kFlywheelGearRatio = 1.0; //10.16 cm
         public static final int kFalconEncoderCPR = 2048;
 
-        public static final double kS = 0.155;
-        public static final double kV = 0.111;
-        public static final double kA = 0.02;
+        public static final double kS = 0.155/40;
+        public static final double kV = 0.111/40;
+        public static final double kA = 0.02/40;
 
         public static final double kDriveSimEncoderDistancePerPulse = (kFlywheelDiameterMeters * Math.PI) / ((double) kFalconEncoderCPR * kFlywheelGearRatio);
 

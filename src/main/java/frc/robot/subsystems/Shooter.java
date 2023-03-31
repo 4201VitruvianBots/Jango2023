@@ -139,8 +139,8 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         updateRPMSetpoint();
-
         SmartDashboard.putNumber("Shooter RPM", getRpm(0));
+        SmartDashboard.putNumber("Shooter Setpoint", getRpmSetpoint());
     }
 
     @Override

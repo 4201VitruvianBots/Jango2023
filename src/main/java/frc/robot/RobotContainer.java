@@ -17,11 +17,13 @@ import frc.robot.commands.climber.EnableClimbMode;
 import frc.robot.commands.climber.SetClimberOutput;
 import frc.robot.commands.drivetrain.SetArcadeDrive;
 import frc.robot.commands.indexer.EjectAll;
+import frc.robot.commands.indexer.FeedAll;
 import frc.robot.commands.intake.ControlledIntake;
 import frc.robot.commands.intake.SetIntakePercentOutput;
 import frc.robot.commands.intake.ToggleIntakePistons;
 import frc.robot.commands.shooter.RapidFireSetpoint;
 import frc.robot.commands.shooter.SetRpmSetpoint;
+import frc.robot.commands.turret.SetTurretManualOutput;
 import frc.robot.commands.turret.SetTurretSetpointFieldAbsolute;
 import frc.robot.commands.turret.ToggleTurretUsingSensor;
 import frc.robot.commands.turret.ZeroTurretEncoder;
@@ -93,7 +95,7 @@ public class RobotContainer {
                 () -> -leftJoystick.getRawAxis(1),
                 () -> rightJoystick.getRawAxis(0)));
 
-        m_turret.setDefaultCommand(new SetTurretSetpointFieldAbsolute(m_turret, m_vision, m_shooter, m_climber, xboxController::getLeftX, xboxController::getLeftY));
+        m_turret.setDefaultCommand(new SetTurretManualOutput(m_turret, xboxController::getLeftX));
         m_climber.setDefaultCommand(new SetClimberOutput(m_climber, xboxController::getRightY));
     }
 
@@ -112,21 +114,24 @@ public class RobotContainer {
     
     
         xboxController.leftTrigger().whileTrue(new SetIntakePercentOutput(m_intake, 0.5));
-        xboxController.rightTrigger().whileTrue(new SetIntakePercentOutput(m_intake, -0.5));
-        xboxController.a().whileTrue(new SetRpmSetpoint(m_shooter, 3000, false));
-        xboxController.b().whileTrue(new SetRpmSetpoint(m_shooter, 3800, false)); 
-        xboxController.y().whileTrue(new SetRpmSetpoint(m_shooter, 3800, false)); 
-        xboxController.x().whileTrue(new SetRpmSetpoint(m_shooter, 0, false)); 
+        xboxController.rightTrigger().whileTrue(new SetIntakePercentOutput(m_intake, 0.5));
+        xboxController.rightTrigger().whileTrue(new FeedAll(m_indexer)); 
+        xboxController.leftTrigger().whileTrue(new EjectAll(m_indexer, m_intake)); 
+
+
+        xboxController.a().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.32)); 
+        xboxController.b().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.50)); 
+        xboxController.y().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.70)); 
 
         xboxController.rightBumper().onTrue(new ToggleIntakePistons(m_intake));
-        xboxController.rightTrigger().whileTrue(new ControlledIntake(m_intake, m_indexer, xboxController::getRightY)); // Deploy intake
+        // xboxController.rightTrigger().whileTrue(new ControlledIntake(m_intake, m_indexer, xboxController::getRightY)); // Deploy intake
 
         // xBoxButtons[0].whileHeld(new SetRpmSetpoint(m_shooter, 3600, true)); // [A] Short-range
         // xBoxButtons[1].whileHeld(new SetRpmSetpoint(m_shooter, 3800, true)); // [B] Med-range
         // xBoxButtons[3].whileHeld(new SetRpmSetpoint(m_shooter, 4000, true)); // [Y] Long-range
         xboxController.povDown().onTrue(new EjectAll(m_indexer, m_intake));      //Top POV - Eject All
 
-        xboxController.rightTrigger().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake));        // flywheel on toggle
+        // xboxController.rightTrigger().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake));        // flywheel on toggle
 
         xboxController.start().onTrue(new ToggleTurretUsingSensor(m_turret));                        // start - toggle control mode turret
         xboxController.leftStick().onTrue(new EnableClimbMode(m_climber, m_turret));                     // R3 - toggle driver climb mode?
