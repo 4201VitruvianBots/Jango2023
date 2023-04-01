@@ -118,12 +118,12 @@ public class RobotContainer {
     
         // xboxController.leftTrigger().whileTrue(new SetIntakePercentOutput(m_intake, 0.5));
         // xboxController.rightTrigger().whileTrue(new SetIntakePercentOutput(m_intake, 0.5));
-        xboxController.rightTrigger().whileTrue(new FeedAll(m_indexer)); 
+        xboxController.rightTrigger().whileTrue(new FeedAll(m_indexer, m_intake)); 
         xboxController.leftTrigger().whileTrue(new EjectAll(m_indexer, m_intake)); 
 
-        xboxController.x().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.1));
-        xboxController.a().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.32)); 
-        xboxController.b().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.54)); 
+        xboxController.a().whileTrue(new RapidFireSetpoint(m_shooter, 0.1));
+        xboxController.b().whileTrue(new RapidFireSetpoint( m_shooter, 0.32)); 
+        xboxController.y().whileTrue(new RapidFireSetpoint( m_shooter, 0.54)); 
         //xboxController.y().whileTrue(new RapidFireSetpoint(m_shooter, m_indexer, m_intake, 0.45)); 
         
         xboxController.rightBumper().onTrue(new ToggleIntakePistons(m_intake));

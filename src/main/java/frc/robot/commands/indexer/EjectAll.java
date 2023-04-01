@@ -7,30 +7,30 @@
 
 package frc.robot.commands.indexer;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
 /**
- * Ejects all powercells from the robot out the intake.
+ * Sends powercells to the shooter for 2 seconds.
  */
 public class EjectAll extends CommandBase {
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final Indexer m_indexer;
     private final Intake m_intake;
 
     /**
-     * Ejects all powercells from the robot out the intake.
-     * 
-     * @param indexer The indexer used by the command.
-     * @param intake The intake used by the command.
+     * Sends powercells to the shooter for 2 seconds.
+     *
+     * @param indexer The indexer used by this command.
      */
+    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     public EjectAll(Indexer indexer, Intake intake) {
         m_indexer = indexer;
         m_intake = intake;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(indexer);
-        addRequirements(intake);
+
     }
 
     // Called when the command is initially scheduled.
@@ -41,17 +41,17 @@ public class EjectAll extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_indexer.setIndexerPercentOutput(-0.6);
-        m_indexer.setKickerPercentOutput(-0.5);
-        m_intake.setIntakePercentOutput(-0.5);
+        m_intake.setIntakePercentOutput(-0.4);
+        m_indexer.setIndexerPercentOutput(-0.4);
+        m_indexer.setKickerPercentOutput(0.4); 
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(final boolean interrupted) {
+    public void end(boolean interrupted) {
+        m_intake.setIntakePercentOutput(0);
         m_indexer.setKickerPercentOutput(0);
         m_indexer.setIndexerPercentOutput(0);
-        m_intake.setIntakePercentOutput(0);
     }
 
     // Returns true when the command should end.

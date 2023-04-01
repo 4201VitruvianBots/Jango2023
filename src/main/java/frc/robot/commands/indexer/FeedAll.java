@@ -10,12 +10,14 @@ package frc.robot.commands.indexer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 
 /**
  * Sends powercells to the shooter for 2 seconds.
  */
 public class FeedAll extends CommandBase {
     private final Indexer m_indexer;
+    private final Intake m_intake;
 
     /**
      * Sends powercells to the shooter for 2 seconds.
@@ -23,8 +25,9 @@ public class FeedAll extends CommandBase {
      * @param indexer The indexer used by this command.
      */
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-    public FeedAll(Indexer indexer) {
+    public FeedAll(Indexer indexer, Intake intake) {
         m_indexer = indexer;
+        m_intake = intake;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(indexer);
 
@@ -38,13 +41,15 @@ public class FeedAll extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_indexer.setIndexerPercentOutput(0.4);
-        m_indexer.setKickerPercentOutput(0.4);
+        m_intake.setIntakePercentOutput(0.65);
+        m_indexer.setIndexerPercentOutput(0.65);
+        m_indexer.setKickerPercentOutput(-0.8);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        m_intake.setIntakePercentOutput(0);
         m_indexer.setKickerPercentOutput(0);
         m_indexer.setIndexerPercentOutput(0);
     }

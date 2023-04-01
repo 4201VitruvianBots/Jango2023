@@ -51,7 +51,7 @@ public class SetArcadeDrive extends CommandBase {
         throttle = throttle < 0 ? Math.max(- 0.7, throttle) : throttle;
         double turn = joystickX;
 
-        m_driveTrain.setMotorArcadeDrive(throttle, turn);
+        m_driveTrain.setMotorArcadeDrive(throttle, -turn);
     }
 
     // Called once the command ends or is interrupted.
