@@ -1,63 +1,92 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboardTab;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.PCMOne;
-import frc.robot.Constants.CAN;
+import frc.robot.Constants;
+// import com.ctre.phoenix.motorcontrol.can.talonSRX;
 
-/** 
- * Subsystem for interacting with the robot's intake
- */
 public class Intake extends SubsystemBase {
-    
-    private final CANSparkMax intakeMotor = new CANSparkMax(CAN.intakeMotor, MotorType.kBrushless);
-    //                                                                          TODO: Is this the right module type?
-    private final DoubleSolenoid intakePiston = new DoubleSolenoid(PCMOne.pcmOne, PneumaticsModuleType.CTREPCM, CAN.intakePistonForward, CAN.intakePistonReverse);
+  /** Creates a new Intake. */
+  private boolean isIntaking = false; // is robot intaking
 
-    private boolean intaking = false;
-    
-    /**
-     * Creates a new Intake.
-     */
-    public Intake() {
-        intakeMotor.restoreFactoryDefaults();
-        intakeMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        intakeMotor.setInverted(false);
-    }
+  // Intake motor setup
 
-    // Self-explanatory functions
-  
-    public boolean getIntakingState() {
-        return intaking;
-    }
+  private TalonSRX[] intakeMotors = {
+    new TalonSRX(Constants.IntakeConstants.intakeMotor),
+  };
 
-    public void setIntakingState(boolean state) {
-        intaking = state;
-    }
+  // Intake piston setup
+  DoubleSolenoid intakePiston =
+      new DoubleSolenoid(
+          Constants.Pneumatics.pcmOne,
+          Constants.Pneumatics.pcmType,
+          Constants.Pneumatics.intakePistonForward,
+          Constants.Pneumatics.intakePistonReverse);
 
-    public boolean getIntakePistonExtendStatus() {
-        return intakePiston.get() == DoubleSolenoid.Value.kForward;
-    }
+  public Intake() {
+    // Motor configuration
 
-    public void setintakePiston(boolean state) {
-        intakePiston.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+    for (TalonSRX intakeMotor : intakeMotors) {
+      intakeMotor.configFactoryDefault();
+      intakeMotor.setNeutralMode(NeutralMode.Coast);
+      intakeMotor.configOpenloopRamp(0.5);
+      intakeMotor.setStatusFramePeriod(1, 100);
+      intakeMotor.setStatusFramePeriod(2, 100);
     }
+    intakeMotors[0].setInverted(false);
+    intakeMotors[1].setInverted(true);
 
-    public void setIntakePercentOutput(double value) {
-        intakeMotor.set(value);
-    }
+    // SmartDashboard.putData("Intake Subsystem", this);
+  }
 
-    private void updateSmartDashboard() {
-        // SmartDashboardTab.putBoolean("Intake", "Intake State", getIntakingState());
-        // SmartDashboardTab.putBoolean("Intake", "Pistons", getIntakePistonExtendStatus());
-    }
+  /** @return Gets a boolean for the intake's actuation */
+  public boolean getIntakeState() {
+    return isIntaking;
+  }
 
-    @Override
-    public void periodic() {
-        updateSmartDashboard();
-    }
+  /** Sets a boolean for the intake's actuation */
+  public void setIntakeState(boolean state) {
+    isIntaking = state;
+  }
+
+  /** @return A boolean value based on the intake's piston status (up or down) */
+  public boolean getIntakePistonExtendStatus() {
+    return intakePiston.get() == DoubleSolenoid.Value.kForward;
+  }
+
+  /** Sets intake piston's states to forward and backward */
+  public void setIntakePiston(boolean state) {
+    intakePiston.set(state ? DoubleSolenoid.Value.kForward : DoubleSolenoid.Value.kReverse);
+  }
+
+  /** sets the amount of power going to the intake */
+  public void setIntakePercentOutput(double value) {
+    intakeMotors[0].set(ControlMode.PercentOutput, value);
+  }
+
+  /** updates intake data on to the dashboard */
+  public void updateSmartDashboard() {
+    SmartDashboard.putBoolean("Intake State", getIntakeState());
+    SmartDashboard.putBoolean("Pistons", getIntakePistonExtendStatus());
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    updateSmartDashboard();
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // This method will be called once per scheduler run during simulation
+  }
 }
